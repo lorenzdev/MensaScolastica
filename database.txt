@@ -7,3 +7,11 @@ Password: E8nYBLixot
 Server: remotemysql.com
 
 Port: 3306
+
+
+
+
+credenziali  Remotemysql
+
+davide.gazzadi@gmail.com
+tepsit
