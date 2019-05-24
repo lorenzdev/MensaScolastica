@@ -28,7 +28,9 @@ $sql="CREATE TABLE studente (
 	classe VARCHAR(4),
 	telefono VARCHAR(10),
 	indirizzo VARCHAR(20),
-	citta VARCHAR(16)
+	citta VARCHAR(16),
+	username VARCHAR(16),
+	password VARCHAR(16)
 	);";
 
 $ok=mysqli_query($conn,$sql);
