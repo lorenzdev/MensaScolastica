@@ -68,9 +68,9 @@ public class ClientMENSA {
         
         switch(input)
         {
-            case 1: guiIscrizione(g_client);
+            case 1: guiIscrizione(g_client,input);
                 break;
-            case 2: guiLogin(g_client);
+            case 2: guiLogin(g_client,input);
                 break;
             case 3:System.out.println("Menu");
                 break;
@@ -78,7 +78,7 @@ public class ClientMENSA {
         }
     }
     
-    public static void guiIscrizione(Socket sig_client)
+    public static void guiIscrizione(Socket sig_client,int service)
     {
         try{
         System.out.print("Inserisci il nome utente: ");
@@ -122,6 +122,7 @@ public class ClientMENSA {
         String sezione = sc_sezione.nextLine();
         
         PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(sig_client.getOutputStream())), true); //creazione stream
+        out.println(service);//invio il tipo di servizio richiesto
         out.println(username);//scrivo sullo stream l'username
         out.println(password);//scrivo sullo stream la password
         out.println(nome);
@@ -133,13 +134,12 @@ public class ClientMENSA {
         out.println(classe);
         out.println(sezione);
         BufferedReader in = new BufferedReader(new InputStreamReader(sig_client.getInputStream()));//ricevo risposta dal server
-        }catch(Exception ex)
-            {
-            ex.printStackTrace();
-            }
+        }
+        catch(Exception ex)
+            {ex.printStackTrace();}
     }
     
-    public static void guiLogin(Socket log_client)
+    public static boolean guiLogin(Socket log_client, int service)
     {
             try{
             System.out.print("Inserisci il nome utente: ");
@@ -154,12 +154,18 @@ public class ClientMENSA {
             out.println(username);//scrivo sullo stream l'username
             out.println(password);//scrivo sullo stream la password
             BufferedReader in = new BufferedReader(new InputStreamReader(log_client.getInputStream()));//ricevo risposta dal server
-            }catch(Exception ex){
-                ex.printStackTrace();
-            }
-        
+            String str_logged = in.readLine();
+            
+            boolean logged = Boolean.parseBoolean(str_logged);
+            
+            return logged;
+            
+            }catch(Exception ex)
+                {ex.printStackTrace();}
         
     }
+    
+    
     
     public static void main(String[] args) {
         // TODO code application logic here
