@@ -47,9 +47,16 @@ public class ClientThread extends Thread{
         
         try{
             
+            statement=connection.createStatement();
+            
             // RICEVO IL MESSAGGIO DALLO STREAM DEL CLIENT
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             
+            //switch 1-4 1(inseriento) 2(login) 3(query1) 4(query2)
+            //1 tutti i campi studente, booleano
+            //2 username e password, booleano
+            //3 giorno, menu e piatti
+            //4 username giorno,  booleano
         
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(client.getOutputStream())), true);
             out.println();
