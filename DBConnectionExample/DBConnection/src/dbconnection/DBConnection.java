@@ -18,10 +18,10 @@ import java.sql.SQLException;
  */
 public class DBConnection {
 
-    static final String DB_URL = "jdbc:mysql://remotemysql.com/u9PpjiOIaV";
+    static final String DB_URL = "jdbc:mysql://localhost:8889/prova";
     static final String DB_DRV = "com.mysql.jdbc.Driver";
-    static final String DB_USER = "u9PpjiOIaV";
-    static final String DB_PASSWD = "E8nYBLixot";
+    static final String DB_USER = "root";
+    static final String DB_PASSWD = "root";
     static Connection connection = null;
     static Statement statement = null;
     static ResultSet resultSet = null;
