@@ -21,13 +21,18 @@ public class ClientMENSA {
     
     private static String service;
     
+    public static String address;
+    public static int port;
+    
     public ClientMENSA(String address, int port){
         
         try{
+            
+            String username="";
             // CREO IL SOCKET
             Socket client = new Socket(address, port);
             
-            // CREO LO STREAM SUL SOCKET
+            /* CREO LO STREAM SUL SOCKET
             PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(client.getOutputStream())), true);
                
             // SCRIVO SULLO STREAM DEL SOCKET
@@ -36,6 +41,10 @@ public class ClientMENSA {
             // RICEVO IL MESSAGGIO DALLO STREAM DEL CLIENT
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             System.out.println("Il Server risponde: "+in.readLine());
+            */
+            
+            guiMenuPrincipale(username,client);
+            
             client.close();
         
         }catch(Exception ex){
@@ -43,17 +52,35 @@ public class ClientMENSA {
         }
     }
     
-    public static void guiMenuPrincipale(String g_username)
+    public static void guiMenuPrincipale(String g_username, Socket g_client)
     {
         System.out.println("Cosa vuoi fare?");
-        System.out.println("Sei loggato come: "+g_username);
+        if (g_username!="")
+            System.out.println("Sei loggato come: "+g_username);
         System.out.println("1) Iscriviti");
-        System.out.println("2) Visualizza il menu di un giorno");
-        System.out.println("3) Prenotazioni per la mensa");
+        System.out.println("2) Login");
+        System.out.println("3) Visualizza il menu di un giorno");
+        System.out.println("4) Prenotazioni per la mensa");
+        
+        Scanner sc_input = new Scanner(System.in);
+        String str_input = sc_input.nextLine();
+        int input = Integer.parseInt(str_input);
+        
+        switch(input)
+        {
+            case 1: guiIscrizione(g_client);
+                break;
+            case 2: guiLogin(g_client);
+                break;
+            case 3:System.out.println("Menu");
+                break;
+            case 4:System.out.println("Prenotazione");
+        }
     }
     
-    public static void guiIscrizione()
+    public static void guiIscrizione(Socket sig_client)
     {
+        try{
         System.out.print("Inserisci il nome utente: ");
         Scanner sc_username = new Scanner(System.in);
         String username = sc_username.nextLine();
@@ -79,8 +106,8 @@ public class ClientMENSA {
         String dataNascita = sc_dataNascita.nextLine();
         
         System.out.print("Inserisci il tuo indirizzo: ");
-        Scanner sc_address = new Scanner(System.in);
-        String address = sc_address.nextLine();
+        Scanner sc_indirizzo = new Scanner(System.in);
+        String indirizzo = sc_indirizzo.nextLine();
         
         System.out.print("Inserisci la città di residenza: ");
         Scanner sc_residenza = new Scanner(System.in);
@@ -93,39 +120,62 @@ public class ClientMENSA {
         System.out.print("Inserisci la sezione: ");
         Scanner sc_sezione = new Scanner(System.in);
         String sezione = sc_sezione.nextLine();
+        
+        PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(sig_client.getOutputStream())), true); //creazione stream
+        out.println(username);//scrivo sullo stream l'username
+        out.println(password);//scrivo sullo stream la password
+        out.println(nome);
+        out.println(cognome);
+        out.println(telefono);
+        out.println(dataNascita);
+        out.println(indirizzo);
+        out.println(residenza);
+        out.println(classe);
+        out.println(sezione);
+        BufferedReader in = new BufferedReader(new InputStreamReader(sig_client.getInputStream()));//ricevo risposta dal server
+        }catch(Exception ex)
+            {
+            ex.printStackTrace();
+            }
     }
     
-    public static void guiLogin()
+    public static void guiLogin(Socket log_client)
     {
-        System.out.print("Inserisci il nome utente: ");
-        Scanner sc_username = new Scanner(System.in);
-        String username = sc_username.nextLine();
+            try{
+            System.out.print("Inserisci il nome utente: ");
+            Scanner sc_username = new Scanner(System.in);
+            String username = sc_username.nextLine();
+
+            System.out.print("Inserisci la password: ");
+            Scanner sc_password = new Scanner(System.in);
+            String password = sc_password.nextLine();
+            
+            PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(log_client.getOutputStream())), true); //creazione stream
+            out.println(username);//scrivo sullo stream l'username
+            out.println(password);//scrivo sullo stream la password
+            BufferedReader in = new BufferedReader(new InputStreamReader(log_client.getInputStream()));//ricevo risposta dal server
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
         
-        System.out.print("Inserisci la password: ");
-        Scanner sc_password = new Scanner(System.in);
-        String password = sc_password.nextLine();
+        
     }
     
     public static void main(String[] args) {
         // TODO code application logic here
-        String username="";
-        
         System.out.print("Inserisci l'indirizzo IP del server: ");
-        Scanner sc_address = new Scanner(System.in);
-        String address = sc_address.nextLine();
-        
+        Scanner sc_address = new Scanner(System.in); 
+        address = sc_address.nextLine();
+
         System.out.print("Inserisci la porta su cui il server fornisce il servizio: ");
         Scanner sc_port = new Scanner(System.in);
         String str_port = sc_port.nextLine();
+
+        port = Integer.parseInt(str_port);
+
+        new ClientMENSA(address,port);
+
         
-        int port = Integer.parseInt(str_port);
-        
-        guiLogin();
-        
-        guiMenuPrincipale(username);
-        
-        
-        new ClientMENSA(address, port);
         
     }
     
