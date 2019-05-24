@@ -16,7 +16,7 @@ $sql="CREATE DATABASE Mensa";
 			echo "DB creato";
 
 //Connessione al database per la creazione delle tabelle
-$sql= "USE dogana";
+$sql= "USE Mensa";
 $ok= mysqli_query($conn,$sql);
 if (!$ok) die("impossibile selezionare DB: ".mysqli_error($conn));
 
@@ -27,7 +27,7 @@ $sql="CREATE TABLE studente (
 	cognome VARCHAR(16),
 	classe VARCHAR(4),
 	telefono VARCHAR(10),
-	indirizzo varcahr(20),
+	indirizzo VARCHAR(20),
 	citta VARCHAR(16)
 	);";
 
@@ -48,74 +48,35 @@ if (!$ok) die("Errore Query: ".mysqli_error($conn));
 //creazione tabella piatto
 $sql="CREATE TABLE piatto (
 	idPiatto INT(4) PRIMARY KEY,
-	 VARCHAR(16)
-	);";
-
-$ok=mysqli_query($conn,$sql);
-if (!$ok) die("Errore Query: ".mysqli_error($conn));
-
-$sql="CREATE TABLE esito (
-	idEsito INT(4) PRIMARY KEY,
-	nome VARCHAR(16)
-	);";
-
-$ok=mysqli_query($conn,$sql);
-if (!$ok) die("Errore Query: ".mysqli_error($conn));
-
-$sql="CREATE TABLE addetti (
-	idAdd INT(4) PRIMARY KEY,
 	nome VARCHAR(16),
-	cognome VARCHAR(16)
+	numCalorie INT(5),
+	tipologia VARCHAR(16)
 	);";
 
 $ok=mysqli_query($conn,$sql);
 if (!$ok) die("Errore Query: ".mysqli_error($conn));
 
-$sql="CREATE TABLE funzionario (
-	idFunz INT(4) PRIMARY KEY,
-	nome VARCHAR(16),
-	cognome VARCHAR(16),
-	username VARCHAR(16),
-	password VARCHAR(16)
+//creazione tabella relazione N-N tra studente e piatto
+$sql="CREATE TABLE ordinano (
+	idStudente INT(4),
+	idPiatto INT(4),
+	PRIMARY KEY (idStudente,idPiatto),
+	FOREIGN KEY (idStudente) REFERENCES studente(idStudente),
+	FOREIGN KEY (idPiatto) REFERENCES piatto(idPiatto)
 	);";
 
 $ok=mysqli_query($conn,$sql);
 if (!$ok) die("Errore Query: ".mysqli_error($conn));
 
-$sql="CREATE TABLE controlli (
-	idCtrl INT(4) PRIMARY KEY,
-	idFunz INT(4),
-	idAdd INT(4),
-	idPass INT(4),
-	provenienza VARCHAR(16),
-	destinazione VARCHAR(16),
-	motivo VARCHAR(16),
-	inizio DATE,
-	fine DATE,
-	dazio INT(16),
-	idEsito INT(4),
-	FOREIGN KEY (idFunz) REFERENCES funzionario(idFunz),
-	FOREIGN KEY (idAdd) REFERENCES addetti(idAdd),
-	FOREIGN KEY (idPass) REFERENCES passeggero(idPass),
-	FOREIGN KEY (idEsito) REFERENCES esito(idEsito)
+//creazione tabella relazione N-N tra piatto e menu
+$sql="CREATE TABLE inserito (
+	idPiatto INT(4),
+	idMenu INT(4),
+	PRIMARY KEY (idMenu,idPiatto),
+	FOREIGN KEY (idMenu) REFERENCES menu(idMenu),
+	FOREIGN KEY (idPiatto) REFERENCES piatto(idPiatto)
 	);";
 
 $ok=mysqli_query($conn,$sql);
 if (!$ok) die("Errore Query: ".mysqli_error($conn));
-
-$sql="CREATE TABLE merce (
-	idProd INT(4),
-	idCtrl  INT(4),
-	idCat INT(4),
-	nome VARCHAR(16),
-	qta INT(4),
-	PRIMARY KEY(idProd,idCtrl),
-	FOREIGN KEY (idCtrl) REFERENCES controlli(idCtrl),
-	FOREIGN KEY (idCat) REFERENCES categoria(idCat)
-	);";
-
-$ok=mysqli_query($conn,$sql);
-if (!$ok) die("Errore Query: ".mysqli_error($conn));
-
-
 ?>
