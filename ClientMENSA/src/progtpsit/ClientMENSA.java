@@ -24,13 +24,13 @@ public class ClientMENSA {
     public static String address;
     public static int port;
     
-    public ClientMENSA(String address, int port){
+    public ClientMENSA(String address, int port){ //FUNZIONE CLIENT
         
         try{
             
             String username="";
             // CREO IL SOCKET
-            Socket client = new Socket(address, port);
+            Socket client = new Socket(address, port); //CREAZIONE SOCKET
             
             /* CREO LO STREAM SUL SOCKET
             PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(client.getOutputStream())), true);
@@ -76,6 +76,15 @@ public class ClientMENSA {
                 break;
             case 4:System.out.println("Prenotazione");
         }
+        try{
+        PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(g_client.getOutputStream())), true); //creazione stream
+        out.println(input);//scrivo sullo stream il servizio richiesto
+        BufferedReader in = new BufferedReader(new InputStreamReader(g_client.getInputStream()));//ricevo risposta dal server
+        }catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        
     }
     
     public static void guiIscrizione(Socket sig_client,int service)
@@ -141,6 +150,7 @@ public class ClientMENSA {
     
     public static boolean guiLogin(Socket log_client, int service)
     {
+        boolean logged=false;
             try{
             System.out.print("Inserisci il nome utente: ");
             Scanner sc_username = new Scanner(System.in);
@@ -156,12 +166,14 @@ public class ClientMENSA {
             BufferedReader in = new BufferedReader(new InputStreamReader(log_client.getInputStream()));//ricevo risposta dal server
             String str_logged = in.readLine();
             
-            boolean logged = Boolean.parseBoolean(str_logged);
+            logged = Boolean.parseBoolean(str_logged);
             
             return logged;
             
             }catch(Exception ex)
-                {ex.printStackTrace();}
+                {ex.printStackTrace();
+                logged=false;
+                return logged;}
         
     }
     
