@@ -52,6 +52,11 @@ public class ClientThread extends Thread{
             PreparedStatement sel;
             String risposta=null;
             studente st= new studente();
+            menu m= new menu();//creare cartella menu
+            piatto p= new piatto();//creare cartella piatto
+            String giorno=null;
+            String menu=null;
+            
             // RICEVO IL MESSAGGIO DALLO STREAM DEL CLIENT
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(client.getOutputStream())), true);
@@ -104,12 +109,51 @@ public class ClientThread extends Thread{
                         st.username=in.readLine();
                         st.password=in.readLine();
                         
+                        while(resultSet.next())
+                        {
                         if(st.username.equals(resultSet.getString("username"))&&st.password.equals(resultSet.getString("password")))
-                            out.println(true);
-                        else out.println(false);
+                        {
+                            result=true;
+                            out.println(result);
+                        }
+                        else result=false;
+                        }
                         break;
-                case 3:
-                case 4:
+                case 3: giorno= in.readLine();
+                        sel = connection.prepareStatement("SELECT menu.giorno,menu.nome,menu.etichetta,piatto.nome,piatto.numCalorie,piatto.tipologia "
+                                + "FROM piatto,menu,inserito"
+                                + "WHERE menu.idMenu = inserito.idMenu"
+                                + "AND piatto.idPiatto = inserito.idPiatto"
+                                + "AND menu.idMenu = ordinano.idMenu"
+                                + "AND menu.giorno = "+ giorno
+                                + "GROUP BY menu.nome");
+                        resultSet= sel.executeQuery();
+                        
+                        menu=null;
+                        risposta=giorno;
+                        while(resultSet.next())
+                        {
+                            if(!resultSet.getString("menu.nome").equals(menu))
+                            {
+                                risposta=risposta+"Menu "+resultSet.getString("menu.nome")+"\n"
+                                        +"Etichetta: "+resultSet.getString("menu.etichetta")+"\n"
+                                        +"---------------------------\n";
+                            }
+                            menu= resultSet.getString("menu.nome");
+                            risposta=risposta+ "Piatto: "+resultSet.getString("piatto.nome")+"\n"
+                                    +"Calorie: "+resultSet.getString("piatto.numcalorie")+"\n"
+                                    +"Tipologia: "+resultSet.getString("piatto.tipologia")+"\n";
+                        }
+                        out.println(risposta);
+                case 4: String username=in.readLine();
+                        giorno=in.readLine();
+                        menu=in.readLine();
+                        sel = connection.prepareStatement("SELECT idStudente FROM studente WHERE username = "+username);
+                        resultSet=sel.executeQuery();
+                        resultSet.next();
+                        int idStudente= Integer.parseInt(resultSet.getString("idStudente"));
+                        sel = connection.prepareStatement("INSERT INTO ordinano(idStudente,idMenu,giorno) VALUES("+idStudente+","+menu+","+giorno+")");
+                        out.println(true);
                 default:
             }
             // CHIUDO I BUFFER E IL SOCKET
