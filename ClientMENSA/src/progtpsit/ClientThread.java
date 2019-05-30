@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package provoaoa;
+package progtpsit;
 
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
@@ -51,9 +51,9 @@ public class ClientThread extends Thread{
             boolean result=false;
             PreparedStatement sel;
             String risposta=null;
-            studente st= new studente();
-            menu m= new menu();//creare cartella menu
-            piatto p= new piatto();//creare cartella piatto
+            //studente st= new studente();
+            //menu m= new menu();//creare cartella menu
+            //piatto p= new piatto();//creare cartella piatto
             String giorno=null;
             String menu=null;
             
@@ -75,7 +75,7 @@ public class ClientThread extends Thread{
                         {
                             id=Integer.parseInt(resultSet.getString("idStudente"));
                         }
-                        st.idstudente=id+1;
+                        /*st.idstudente=id+1;
                         st.nome=in.readLine();
                         st.cognome=in.readLine();
                         st.classe=in.readLine();
@@ -102,9 +102,9 @@ public class ClientThread extends Thread{
                             out.println(result);
                         }
                         break;
-                        
+                        */
                 case 2: sel = connection.prepareStatement("SELECT username,password FROM utenti");
-                        resultSet= sel.executeQuery();
+                        /*resultSet= sel.executeQuery();
                         
                         st.username=in.readLine();
                         st.password=in.readLine();
@@ -118,7 +118,7 @@ public class ClientThread extends Thread{
                         }
                         else result=false;
                         }
-                        break;
+                        break;*/
                 case 3: giorno= in.readLine();
                         sel = connection.prepareStatement("SELECT menu.giorno,menu.nome,menu.etichetta,piatto.nome,piatto.numCalorie,piatto.tipologia "
                                 + "FROM piatto,menu,inserito"

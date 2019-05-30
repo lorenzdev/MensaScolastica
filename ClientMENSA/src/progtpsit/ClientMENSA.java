@@ -161,7 +161,8 @@ public class ClientMENSA {
             return logged;
             
             }catch(Exception ex)
-                {ex.printStackTrace();}
+                {ex.printStackTrace();
+                return false;}
         
     }
     
